@@ -24,7 +24,7 @@ impl<T> Node<T> {
 }
 
 impl<T> LinkedList<T> {
-    fn new() -> LinkedList<T> {
+    pub fn new() -> LinkedList<T> {
         LinkedList {
             head: null_mut(),
             tail: null_mut(),
@@ -32,54 +32,48 @@ impl<T> LinkedList<T> {
         }
     }
 
-    fn peek_head(&self) -> Option<&T> {
+    pub fn peek_head(&self) -> Option<&T> {
         if self.head.is_null() {
-            assert!(self.size == 0);
             None
         } else {
             unsafe { Some(&(*self.head).val) }
         }
     }
 
-    fn peek_tail(&self) -> Option<&T> {
+    pub fn peek_tail(&self) -> Option<&T> {
         if self.tail.is_null() {
-            assert!(self.size == 0);
             None
         } else {
             unsafe { Some(&(*self.tail).val) }
         }
     }
 
-    fn prepend(&mut self, new_elem: T) {
+    pub fn prepend(&mut self, new_elem: T) {
         let new_elem = Box::into_raw(Box::new(Node::new(new_elem)));
         if self.head.is_null() {
-            assert!(self.tail.is_null());
-            assert!(self.size == 0);
             self.head = new_elem;
             self.tail = new_elem;
             self.size += 1;
         } else {
-            assert!(self.size > 0);
             let old_head = self.head;
             unsafe {
                 (*old_head).prev = new_elem;
             }
-            unsafe {(*new_elem).next = old_head;}
+            unsafe {
+                (*new_elem).next = old_head;
+            }
             self.head = new_elem;
             self.size += 1;
         }
     }
 
-    fn append(&mut self, new_elem: T) {
+    pub fn append(&mut self, new_elem: T) {
         let new_elem = Box::into_raw(Box::new(Node::new(new_elem)));
         if self.tail.is_null() {
-            assert!(self.head.is_null());
-            assert!(self.size == 0);
             self.head = new_elem;
             self.tail = new_elem;
             self.size += 1;
         } else {
-            assert!(self.size > 0);
             let old_tail = self.tail;
             unsafe {
                 (*old_tail).next = new_elem;
@@ -90,9 +84,8 @@ impl<T> LinkedList<T> {
         }
     }
 
-    fn pop_head(&mut self) -> Option<T> {
+    pub fn pop_head(&mut self) -> Option<T> {
         if self.head.is_null() {
-            assert!(self.size == 0);
             None
         } else {
             let old_head = self.head;
@@ -116,9 +109,8 @@ impl<T> LinkedList<T> {
         }
     }
 
-    fn pop_tail(&mut self) -> Option<T> {
+    pub fn pop_tail(&mut self) -> Option<T> {
         if self.tail.is_null() {
-            assert!(self.size == 0);
             None
         } else {
             let old_tail = self.tail;
